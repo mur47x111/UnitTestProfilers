@@ -23,7 +23,7 @@ public class Profiler {
 
 	public static void dump() {
 		try (Dumper dumper = new FileDumper(
-				"results" + java.lang.management.ManagementFactory.getRuntimeMXBean().getName())) {
+				"results-validation" + java.lang.management.ManagementFactory.getRuntimeMXBean().getName())) {
 			validated.forEach(dumper::println);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
