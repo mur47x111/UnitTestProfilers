@@ -4,8 +4,8 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
+import ch.usi.dag.profiler.GuardThreadPool;
 import ch.usi.dag.profiler.GuardUnitTest;
-import ch.usi.dag.profiler.meta.Profiler;
 
 public class Instrumentation {
 
@@ -16,10 +16,10 @@ public class Instrumentation {
 
 	@After(marker = BodyMarker.class, guard = GuardUnitTest.class)
 	static void onMethodExit(MethodStaticContext msc) {
-		Profiler.startTest(msc.thisMethodFullName());
+		Profiler.endTest(msc.thisMethodFullName());
 	}
 
-	@Before(marker = BodyMarker.class, scope = "Foo.bar")
+	@Before(marker = BodyMarker.class, guard = GuardThreadPool.class)
 	static void intercepted() {
 		Profiler.validate();
 	}
