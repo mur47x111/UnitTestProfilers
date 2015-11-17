@@ -22,11 +22,13 @@ public class MethodAnnotationContext extends MethodStaticContext {
 			if ("Lorg/junit/Test;".equals(annotation.desc)) {
 				// JUnit
 				return true;
-			} else if ("Lorg/testng/annotations/Test;".equals(annotation.desc)) {
-				// TestNG
-				// omitting @Test-annotated class
-				return true;
-			}
+			} 
+			// TestNG
+			// omitting @Test-annotated class
+			// else if ("Lorg/testng/annotations/Test;".equals(annotation.desc))
+			// {
+			// return true;
+			// }
 		}
 		return false;
 	}
