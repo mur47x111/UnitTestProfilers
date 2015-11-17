@@ -41,7 +41,6 @@ public class Profiler {
 
 	public static void endTest(String m) {
 		currentTest = null;
-		validated = new ConcurrentSkipListSet<>();
 		globalLock.unlock();
 	}
 
@@ -49,13 +48,14 @@ public class Profiler {
 		
 		/* This method is called in any Object implementing a ThreadPool-related interface.
 		 * We just need to check that the global lock is locked, and that was locked by the same thread as the current one */  
-		System.out.println("Validate() entered! Method: " +currentTest + " locked: "+ globalLock.isLocked()+ " thread: "+ globalLock.isHeldByCurrentThread());
+		
+		//System.out.println("Validate() entered! Method: " +currentTest + " locked: "+ globalLock.isLocked()+ " thread: "+ globalLock.isHeldByCurrentThread());
 		
 		if (globalLock.isLocked() && globalLock.isHeldByCurrentThread()) {
 		//if (globalLock.isLocked()) {
 			// here we assume no invocation from the underlying framework
 			validated.add(currentTest);
-			System.out.println("YES!");
+			//System.out.println("YES!");
 		}		
 	}
 
