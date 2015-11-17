@@ -17,7 +17,7 @@ public class Instrumentation {
 
 	@After(marker = BodyMarker.class, guard = GuardUnitTest.class)
 	static void onMethodExit(MethodStaticContext msc) {
-		Profiler.startTest(msc.thisMethodFullName());
+		Profiler.endTest(msc.thisMethodFullName());
 	}
 
 	@AfterReturning(marker = BytecodeMarker.class, args = "new")
