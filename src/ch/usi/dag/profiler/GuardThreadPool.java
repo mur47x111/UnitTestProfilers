@@ -6,8 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 import org.objectweb.asm.Type;
@@ -21,7 +24,7 @@ public abstract class GuardThreadPool {
 
 
 	static Set <Type> interfacesToCheck = Arrays.asList (
-			Executor.class, ExecutorService.class).stream ().map (Type::getType).collect (Collectors.toSet ());
+			Executor.class, ExecutorService.class, AbstractExecutorService.class, ThreadPoolExecutor.class, ForkJoinPool.class).stream ().map (Type::getType).collect (Collectors.toSet ());
 
 
 	static Map <String, Boolean> cachedResults = new HashMap <> ();
@@ -49,7 +52,7 @@ public abstract class GuardThreadPool {
 			try {
 				final boolean matches = __doCheckInterfaces (leafClass, interfacesToCheck);
 				if (matches) {
-					System.err.println ("matched: "+ leafClass.internalName ());
+					//System.err.println ("matched: "+ leafClass.internalName ());
 				}
 
 				resultCache.put (className, matches);
@@ -58,7 +61,7 @@ public abstract class GuardThreadPool {
 			} catch (final MissingClassException cnle) {
 				if (!reportedMissing.contains (cnle.classInternalName ())) {
 					reportedMissing.add (cnle.classInternalName ());
-					System.err.println ("warning: "+ cnle.getMessage ());
+					//System.err.println ("warning: "+ cnle.getMessage ());
 				}
 				return false;
 			}
