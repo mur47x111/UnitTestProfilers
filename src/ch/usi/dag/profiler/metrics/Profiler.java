@@ -22,6 +22,13 @@ public class Profiler {
 		allocations = new ConcurrentHashMap<>();
 		invocations = new ConcurrentHashMap<>();
 		Runtime.getRuntime().addShutdownHook(new Thread(Profiler::dump));
+
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				dump();
+			}
+		}));
 	}
 
 	public static void dump() {
@@ -49,14 +56,20 @@ public class Profiler {
 	}
 
 	public static void profileAllocation() {
-		if (globalLock.isLocked()) {
-			allocations.computeIfAbsent(currentTest, k -> new AtomicLong()).incrementAndGet();
+		if (globalLock.isLocked() && currentTest != null) {
+			String test = currentTest;
+			if (test != null) {
+				allocations.computeIfAbsent(test, k -> new AtomicLong()).incrementAndGet();
+			}
 		}
 	}
 
 	public static void profileInvocation() {
 		if (globalLock.isLocked()) {
-			invocations.computeIfAbsent(currentTest, k -> new AtomicLong()).incrementAndGet();
+			String test = currentTest;
+			if (test != null) {
+				invocations.computeIfAbsent(test, k -> new AtomicLong()).incrementAndGet();
+			}
 		}
 	}
 
