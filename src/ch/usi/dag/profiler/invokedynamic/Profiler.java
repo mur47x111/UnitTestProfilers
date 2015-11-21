@@ -1,4 +1,4 @@
-package ch.usi.dag.profiler.threadpool;
+package ch.usi.dag.profiler.invokedynamic;
 
 import java.io.FileNotFoundException;
 import java.util.Set;
@@ -25,7 +25,7 @@ public class Profiler {
 		try (Dumper dumper = new FileDumper(
 				"results-validation" + java.lang.management.ManagementFactory.getRuntimeMXBean().getName())) {			
 			for (String s: validated)
-				dumper.println("THREADPOOL " + s);
+				dumper.println("INVOKEDYNAMIC " + s);
 		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -45,23 +45,9 @@ public class Profiler {
 	}
 
 	public static void validate() {
-		
-		/* This method is called in any Object implementing a ThreadPool-related interface.
-		 * We just need to check that the global lock is locked, and that was locked by the same thread as the current one */  
-		
-		//System.out.println("Validate() entered! Method: " +currentTest + " locked: "+ globalLock.isLocked()+ " thread: "+ globalLock.isHeldByCurrentThread());
-		try {
-		
 			if (globalLock.isLocked() && globalLock.isHeldByCurrentThread()) {
-				//if (globalLock.isLocked()) {
-				// here we assume no invocation from the underlying framework
-				validated.add(currentTest);
-				//System.out.println("YES!");
-			}
-		}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+				validated.add(currentTest);				
+			}		
 	}
 
 }
