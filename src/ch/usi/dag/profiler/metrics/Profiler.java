@@ -22,13 +22,6 @@ public class Profiler {
 		allocations = new ConcurrentHashMap<>();
 		invocations = new ConcurrentHashMap<>();
 		Runtime.getRuntime().addShutdownHook(new Thread(Profiler::dump));
-
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				dump();
-			}
-		}));
 	}
 
 	public static void dump() {
